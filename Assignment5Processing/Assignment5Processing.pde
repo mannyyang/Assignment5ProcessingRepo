@@ -5,7 +5,6 @@ Particle[] others;
 ParticleSystem physics;
 
 PImage img;
-PImage bgImg;
 Cell[][] grid;
 int cols = 24;
 int rows = 40;
@@ -16,7 +15,6 @@ void setup()
   frameRate(24);
   
   //Image loads and manipulations
-  bgImg = loadImage("YellowGradient.png");
   img = loadImage("fade.png");
   imageMode(CORNER);
   tint(0, 32);
@@ -47,7 +45,7 @@ void setup()
 
 void draw()
 {
-  background(bgImg);
+  background(255);
   mouse.position().set(mouseX, mouseY, 0);
   
   //Grid production
@@ -57,13 +55,9 @@ void draw()
     {
       // display each object
       grid[i][j].displayGrid();
-      //grid[i][j].mouseOver(i, j);
+      grid[i][j].gradient(i, j);
+      grid[i][j].mouseOver(i,j);
     }
-  }
-  
-  if ()
-  {
-    
   }
 
   //Particale production
@@ -72,20 +66,19 @@ void draw()
      Particle p = others[i];
      image(img,p.position().x()-img.width/2,p.position().y()-img.height/2);
   }
-  physics.tick();
-  
+  physics.tick(); 
 }
 
 // A Cell object
 class Cell 
 {
   // A cell object knows about its location in the grid as well as its size with the variables x,y,w,h.
-  float x,y;   // x,y location
-  float w,h;   // width and height
+  int x,y;   // x,y location
+  int w,h;   // width and height
   float angle; // angle for oscillating brightness
 
   // Cell Constructor
-  Cell(float tempX, float tempY, float tempW, float tempH, float tempAngle) 
+  Cell(int tempX, int tempY, int tempW, int tempH, float tempAngle) 
   {
     x = tempX;
     y = tempY;
@@ -97,16 +90,28 @@ class Cell
   void displayGrid() 
   {
     stroke(0);
-    fill(255, 0);
+    strokeWeight(1.5);
     rect(x,y,w,h); 
+  }
+  
+  void gradient(int i, int j)
+  {
+    fill(255, 255, (i*j)/2, 1000);
+    rect(x,y,w,h);
   }
   
   void mouseOver(int i, int j)
   {
-    fill(0);
-    rect(x, y, w, h);
+    stroke(0);
+    strokeWeight(3);
+    fill((i*j)/3, (i*j)/3, (i*j)/3);
+    rect(mouseX/20*20, y, w, h);
+    stroke(0);
+    strokeWeight(3);
+    fill((i*j)/3, (i*j)/3, (i*j)/3);
+    rect(x, mouseY/20*20, w, h);
   }
-  
 }
+
 
 
